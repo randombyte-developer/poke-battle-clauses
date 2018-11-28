@@ -1,0 +1,9 @@
+# Created by .ignore support plugin (hsz.mobi)
+### SpongePlugins3 template
+.idea/
+.gradle/
+build/
+run/
+*.jar
+!gradle-wrapper.jar
+*.iml
