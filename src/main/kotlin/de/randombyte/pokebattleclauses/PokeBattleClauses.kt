@@ -4,7 +4,7 @@ import com.google.inject.Inject
 import com.pixelmonmod.pixelmon.battles.rules.clauses.BattleClause
 import com.pixelmonmod.pixelmon.battles.rules.clauses.BattleClauseRegistry
 import de.randombyte.pokebattleclauses.config.ConfigAccessor
-import org.bstats.sponge.Metrics2
+import org.bstats.sponge.Metrics
 import org.slf4j.Logger
 import org.spongepowered.api.Sponge
 import org.spongepowered.api.config.ConfigDir
@@ -25,7 +25,7 @@ class PokeBattleClauses @Inject constructor(
         val logger: Logger,
         @ConfigDir(sharedRoot = false) configPath: Path,
         private val pluginContainer: PluginContainer,
-        private val bStats: Metrics2
+        private val bStats: Metrics
 ) {
     internal companion object {
         const val ID = "poke-battle-clauses"
