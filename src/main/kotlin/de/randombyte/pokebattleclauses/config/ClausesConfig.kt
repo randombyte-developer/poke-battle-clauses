@@ -75,10 +75,10 @@ import org.spongepowered.api.item.inventory.ItemStack
                 return@parseTypeValues type
             }
 
-            moves?.parseTypeValues { attackName ->
-                val attackBase = AttackBase.getAttackBase(attackName).orNull()
+            moves?.parseTypeValues { moveName ->
+                val attackBase = AttackBase.getAttackBase(moveName).orNull()
                 if (attackBase == null) {
-                    logger.error("Could not find move '$attackName'!")
+                    logger.error("Could not find move '$moveName'!")
                     return false
                 }
 
