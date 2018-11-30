@@ -24,6 +24,7 @@ import org.spongepowered.api.item.inventory.ItemStack
     constructor() : this(
             clauses = mapOf(
                     "an_example" to ClauseConfig(
+                            description = "An example clause",
                             types = BlackWhiteList(
                                     listType = WHITE,
                                     list = listOf("electric", "ground")
@@ -49,6 +50,7 @@ import org.spongepowered.api.item.inventory.ItemStack
     }
 
     @ConfigSerializable class ClauseConfig(
+            @Setting("description") val description: String = "",
             @Setting("types") val types: BlackWhiteList<EnumType>? = null,
             @Setting("moves") val moves: BlackWhiteList<Attack>? = null,
             @Setting("abilities") val abilities: BlackWhiteList<Class<out AbilityBase>>? = null,

@@ -5,6 +5,8 @@ import com.pixelmonmod.pixelmon.entities.pixelmon.stats.links.PokemonLink
 import de.randombyte.pokebattleclauses.config.ClausesConfig.ClauseConfig
 
 class VariableClause(id: String, val clauseConfig: ClauseConfig) : BattleClause(id) {
+    override fun getDescription() = clauseConfig.description
+
     override fun validateSingle(pokemon: PokemonLink): Boolean {
 
         val debugEnabled = PokeBattleClauses.INSTANCE.configAccessors.general.get().debug
