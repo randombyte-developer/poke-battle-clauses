@@ -9,7 +9,10 @@ import de.randombyte.pokebattleclauses.config.ListType.BLACK
 import de.randombyte.pokebattleclauses.config.ListType.WHITE
 
 class VariableClause(id: String, val clauseConfig: ClauseConfig) : BattleClause(id) {
-    override fun getDescription() = clauseConfig.description
+
+    init {
+        description = clauseConfig.description
+    }
 
     override fun validateSingle(pokemon: PokemonLink): Boolean {
 
