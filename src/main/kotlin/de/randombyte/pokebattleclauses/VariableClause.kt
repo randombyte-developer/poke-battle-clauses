@@ -1,8 +1,8 @@
 package de.randombyte.pokebattleclauses
 
+import com.pixelmonmod.pixelmon.api.pokemon.Pokemon
 import com.pixelmonmod.pixelmon.battles.attacks.Attack
 import com.pixelmonmod.pixelmon.battles.rules.clauses.BattleClause
-import com.pixelmonmod.pixelmon.entities.pixelmon.stats.links.PokemonLink
 import com.pixelmonmod.pixelmon.enums.EnumType
 import de.randombyte.pokebattleclauses.config.ClausesConfig.ClauseConfig
 import de.randombyte.pokebattleclauses.config.ListType.BLACK
@@ -14,7 +14,7 @@ class VariableClause(id: String, val clauseConfig: ClauseConfig) : BattleClause(
         description = clauseConfig.description
     }
 
-    override fun validateSingle(pokemon: PokemonLink): Boolean {
+    override fun validateSingle(pokemon: Pokemon): Boolean {
 
         val debugEnabled = PokeBattleClauses.INSTANCE.configAccessors.general.get().debug
 
@@ -30,8 +30,8 @@ class VariableClause(id: String, val clauseConfig: ClauseConfig) : BattleClause(
             }
 
             when (typeConfig.listType) {
-                WHITE -> pokemon.type.any(typeCheck)
-                BLACK -> pokemon.type.all(typeCheck)
+                WHITE -> pokemon.species.baseStats.types.any(typeCheck)
+                BLACK -> pokemon.species.baseStats.types.all(typeCheck)
             }
         } ?: true
         debug("--> Type check passed: $typeCheckPassed")
@@ -57,7 +57,7 @@ class VariableClause(id: String, val clauseConfig: ClauseConfig) : BattleClause(
         debug("--> Abilities check passed: $abilitiesCheckPassed")
 
         val itemsCheckPassed = clauseConfig.items?.let { itemConfig ->
-            val heldItemClass = pokemon.heldItem::class.java
+            val heldItemClass = pokemon.heldItemAsItemHeld::class.java
             val itemAllowed = itemConfig.isAllowed(heldItemClass)
             debug("Item '${heldItemClass.simpleName}' allowed: $itemAllowed")
             return@let itemAllowed
