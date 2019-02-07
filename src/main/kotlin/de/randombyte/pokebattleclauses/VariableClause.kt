@@ -19,7 +19,7 @@ class VariableClause(id: String, val clauseConfig: ClauseConfig) : BattleClause(
         val debugEnabled = PokeBattleClauses.INSTANCE.configAccessors.general.get().debug
 
         fun debug(message: String) {
-            if (debugEnabled) PokeBattleClauses.INSTANCE.logger.info("{Clause '$id' debug ${pokemon.nickname}} $message")
+            if (debugEnabled) PokeBattleClauses.INSTANCE.logger.info("{Clause '$id' debug ${pokemon.displayName}} $message")
         }
 
         val typeCheckPassed = clauseConfig.types?.let { typeConfig ->
