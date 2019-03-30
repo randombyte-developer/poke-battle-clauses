@@ -3,6 +3,7 @@ package de.randombyte.pokebattleclauses
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon
 import com.pixelmonmod.pixelmon.battles.attacks.Attack
 import com.pixelmonmod.pixelmon.battles.rules.clauses.BattleClause
+import com.pixelmonmod.pixelmon.enums.EnumSpecies
 import com.pixelmonmod.pixelmon.enums.EnumType
 import de.randombyte.pokebattleclauses.config.ClausesConfig.ClauseConfig
 import de.randombyte.pokebattleclauses.config.ListType.BLACK
@@ -64,7 +65,12 @@ class VariableClause(id: String, val clauseConfig: ClauseConfig) : BattleClause(
         } ?: true
         debug("--> Items check passed: $itemsCheckPassed")
 
-        val result = typeCheckPassed && movesCheckPassed && abilitiesCheckPassed && itemsCheckPassed
+        val legendaryCheckPassed = clauseConfig.legendary?.let { legendary ->
+            legendary == pokemon.species in EnumSpecies.LEGENDARY_ENUMS
+        } ?: true
+        debug("--> Legendary check passed: $legendaryCheckPassed")
+
+        val result = typeCheckPassed && movesCheckPassed && abilitiesCheckPassed && itemsCheckPassed && legendaryCheckPassed
 
         debug("==> This pokemon is allowed: $result")
 

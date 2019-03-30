@@ -40,7 +40,8 @@ import org.spongepowered.api.item.inventory.ItemStack
                             items = BlackWhiteList(
                                     listType = BLACK,
                                     list = listOf("pixelmon:smoke_ball")
-                            )
+                            ),
+                            legendary = false
                     )
             )
     )
@@ -54,7 +55,8 @@ import org.spongepowered.api.item.inventory.ItemStack
             @Setting("types") val types: BlackWhiteList<EnumType>? = null,
             @Setting("moves") val moves: BlackWhiteList<Attack>? = null,
             @Setting("abilities") val abilities: BlackWhiteList<Class<out AbilityBase>>? = null,
-            @Setting("items") val items: BlackWhiteList<Class<out ItemHeld>>? = null
+            @Setting("items") val items: BlackWhiteList<Class<out ItemHeld>>? = null,
+            @Setting("legendary") val legendary: Boolean? = null
     ) {
 
         /**

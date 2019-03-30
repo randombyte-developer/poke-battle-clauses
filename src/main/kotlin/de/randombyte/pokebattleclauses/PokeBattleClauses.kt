@@ -7,7 +7,6 @@ import de.randombyte.kosp.extensions.*
 import de.randombyte.pokebattleclauses.config.ConfigAccessor
 import org.bstats.sponge.Metrics2
 import org.slf4j.Logger
-import org.spongepowered.api.Platform
 import org.spongepowered.api.Sponge
 import org.spongepowered.api.config.ConfigDir
 import org.spongepowered.api.event.Listener
@@ -70,8 +69,6 @@ class PokeBattleClauses @Inject constructor(
 
     @Listener
     fun onPlayerJoin(event: ClientConnectionEvent.Join) {
-        if (!Sponge.getPlatform().getContainer(Platform.Component.API).version.get().startsWith("7.1.")) return
-
         val uuid = event.targetEntity.uniqueId
         if (
                 !configAccessors.general.get().disableMetricsMessages &&
