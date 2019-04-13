@@ -51,10 +51,12 @@ class VariableClause(id: String, val clauseConfig: ClauseConfig) : BattleClause(
         } ?: true
         debug("--> Moves check passed: $movesCheckPassed")
 
-        val abilityClass = pokemon.ability::class.java
-        val abilityAllowed = clauseConfig.abilities?.isAllowed(abilityClass)
-        if (abilityAllowed != null) debug("Ability '${abilityClass.simpleName}' allowed: $abilityAllowed")
-        val abilitiesCheckPassed = abilityAllowed ?: true
+        val abilitiesCheckPassed = clauseConfig.abilities?.let { abilityConfig ->
+            val abilityClass = pokemon.ability::class.java
+            val abilityAllowed = abilityConfig.isAllowed(abilityClass)
+            debug("Ability '${abilityClass.simpleName}' allowed: $abilityAllowed")
+            return@let abilityAllowed
+        } ?: true
         debug("--> Abilities check passed: $abilitiesCheckPassed")
 
         val itemsCheckPassed = clauseConfig.items?.let { itemConfig ->
@@ -65,12 +67,26 @@ class VariableClause(id: String, val clauseConfig: ClauseConfig) : BattleClause(
         } ?: true
         debug("--> Items check passed: $itemsCheckPassed")
 
+        val levelsCheckPassed = clauseConfig.levels?.let { levelConfig ->
+            var levelAllowed = false
+            if (levelConfig.ensureInitialization()) {
+                val levelInRange = levelConfig.listValues!!.any { range -> pokemon.level in range }
+                levelAllowed = when (levelConfig.listType) {
+                    WHITE -> levelInRange
+                    BLACK -> !levelInRange
+                }
+            }
+            debug("Level '${pokemon.level}' allowed: $levelAllowed")
+            return@let levelAllowed
+        } ?: true
+        debug("--> Levels check passed: $levelsCheckPassed")
+
         val legendaryCheckPassed = clauseConfig.legendary?.let { legendary ->
             legendary == pokemon.species in EnumSpecies.LEGENDARY_ENUMS
         } ?: true
         debug("--> Legendary check passed: $legendaryCheckPassed")
 
-        val result = typeCheckPassed && movesCheckPassed && abilitiesCheckPassed && itemsCheckPassed && legendaryCheckPassed
+        val result = typeCheckPassed && movesCheckPassed && abilitiesCheckPassed && itemsCheckPassed && levelsCheckPassed && legendaryCheckPassed
 
         debug("==> This pokemon is allowed: $result")
 

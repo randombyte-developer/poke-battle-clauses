@@ -41,6 +41,10 @@ import org.spongepowered.api.item.inventory.ItemStack
                                     listType = BLACK,
                                     list = listOf("pixelmon:smoke_ball")
                             ),
+                            levels = BlackWhiteList(
+                                    listType = WHITE,
+                                    list = listOf("1-20", "44", "60-63")
+                            ),
                             legendary = false
                     )
             )
@@ -56,6 +60,7 @@ import org.spongepowered.api.item.inventory.ItemStack
             @Setting("moves") val moves: BlackWhiteList<Attack>? = null,
             @Setting("abilities") val abilities: BlackWhiteList<Class<out AbilityBase>>? = null,
             @Setting("items") val items: BlackWhiteList<Class<out ItemHeld>>? = null,
+            @Setting("levels") val levels: BlackWhiteList<IntRange>? = null,
             @Setting("legendary") val legendary: Boolean? = null
     ) {
 
@@ -114,6 +119,18 @@ import org.spongepowered.api.item.inventory.ItemStack
                 return@parseTypeValues pixelmonItemHeld::class.java
             }
 
+            levels?.parseTypeValues { levelRangeString ->
+                val splits = levelRangeString.split("-", limit = 2)
+                val numbers = splits.map {
+                    val number = it.toIntOrNull()
+                    if (number == null) {
+                        logger.error("'$it' is not a number!")
+                        return false
+                    } else number
+                }
+                numbers[0]..numbers[if (numbers.size == 2) 1 else 0]
+            }
+
             return true
         }
     }
@@ -133,11 +150,16 @@ enum class ListType { WHITE, BLACK }
         listValues = list.map(parser)
     }
 
-    fun isAllowed(obj: T): Boolean {
+    fun ensureInitialization(): Boolean {
         if (listValues == null) {
             PokeBattleClauses.INSTANCE.logger.error("The clause values were not initialized, check for previous errors!")
             return false
         }
+        return true
+    }
+
+    fun isAllowed(obj: T): Boolean {
+        if (!ensureInitialization()) return false
         return when (listType) {
             WHITE -> obj in listValues!!
             BLACK -> obj !in listValues!!
